@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>JS-patterns</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible"
+		  content="ie=edge">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1">
+	<link rel="stylesheet"
+		  href="node_modules/shower-ribbon/styles/screen-16x10.css">
+</head>
+<body class="shower list">
+<header class="caption">
+	<h1>JS patterns</h1>
+	<p>Maksim Khramtsov</p>
+
+</header>
+<section class="slide"
+		 id="patternsPic">
+	<h2 class="shrink">JS patterns</h2>
+	<img src="img/Patterns.jpg"
+		 alt=""
+		 class="cover">
+	<style>
+		#patternsPic h2 {
+			color: #fcffef;
+		}
+	</style>
+</section>
+<section class="slide">
+	<h2 class="shrink">JS patterns</h2>
+	<blockquote>Повторимая архитектурная конструкция, представляющая собой решение проблемы проектирования в рамках некоторого
+		часто возникающего контекста.</blockquote>
+</section>
+<section class="slide">
+	<h2 class="shrink">JS patterns</h2>
+	<ul>
+		<li>
+			Помогают писать более эффективный программный код, используя наработанные приемы и не изобретая велосипед.
+		</li>
+		<li class="next">
+			Уменьшают связанность модулей.
+		</li>
+		<li class="next">
+			Помогают писать легко-масштабируемый код.
+		</li>
+		<li class="next">
+			Упрощают поддержку.
+		</li>
+		<li class="next">
+			Упрощают дискуссию между разработчиками.
+		</li>
+	</ul>
+</section>
+<section class="slide"
+		 id="closurePic">
+	<h2 class="shrink">Closures</h2>
+	<img src="img/Closure.jpg"
+		 alt=""
+		 class="cover">
+	<style>
+		#closurePic h2 {
+			color: #d8a280;
+		}
+	</style>
+</section>
+<section class="slide">
+	<h2>Closures</h2>
+	<p>Замыкание - это выражение (обычно функция), которое может иметь свободные переменные, вместе со средой,
+		которая привязывает эти переменные (т.е. “замыкает” это выражение).</p>
+	<p>Замыкание - это функция вместе со всеми внешними переменными, которые ей доступны.</p>
+</section>
+<section class="slide">
+	<h2>Closures</h2>
+	<pre>
+		<code>var exVar = 10; <span class="comment">//ext</span></code>
+		<code class="next">function getClosure() { <span class="comment next">//getClosure.[[Scope]] = ext.LE</span></code>
+		<code class="next"> var inVar = 0; <span class="comment next">//getClosure.LE.intVar = 0</span></code>
+		<code class="next"> return function() { <span class="comment next">//anonimFunc.[[Scope]] = getClosure.LE</span></code>
+		<code class="next">   return ++inVar + exVar; } }</code>
+		<code class="next">var showClosure = getClosure();</code>
+		<code class="next">showClosure(); <span class="comment next">/*return 11*/</span></code>
+		<code class="next">showClosure(); <span class="comment next">/*return 12*/</span></code>
+	</pre>
+</section>
+<section class="slide">
+	<h2>Closures</h2>
+	<ul>
+		<li>Каждая функция при создании получает ссылку
+			<mark>[[Scope]]</mark>
+			на объект с переменными, в контексте которого была создана.
+		</li>
+		<li class="next">
+			При запуске функции создаётся новый объект с переменными
+			<mark>LexicalEnvironment</mark>
+			. Он получает ссылку на внешний объект переменных из
+			<mark>[[Scope]]</mark>
+			.
+		</li>
+		<li class="next">При поиске переменных он осуществляется сначала в текущем объекте переменных, а потом – по этой
+			ссылке.
+		</li>
+	</ul>
+</section>
+<section class="slide"
+		 id="singletonPic">
+	<h2>Singleton</h2>
+	<img src="img/Singleton.jpg"
+		 alt=""
+		 class="cover">
+	<style>
+		#singletonPic h2 {
+			color: #3ea681;
+		}
+	</style>
+</section>
+<section class="slide">
+	<h2>Singleton</h2>
+	<ol>
+		<li>Класс, который может иметь только один экземпляр.</li>
+		<li class="next">При попытке создать экземпляр класса
+			<mark>повторно</mark>
+			- возвращает ссылку на существующий экземпляр.
+		</li>
+		<li class="next">Обеспечивает доступ к объекту без использования глобальных переменных.</li>
+	</ol>
+</section>
+<section class="slide">
+	<h2>Singleton</h2>
+	<pre>
+	<code>var <mark>Singleton</mark>;</code>
+	<code class="next">(function () {</code>
+	<code class="next"> var instance; <span class="comment next">//будем забираем эеземпляр из замыкания</span></code>
+	<div class="next">
+		<code> Singleton = function Singleton(qwe) {</code>
+		<code>  <mark>if (instance) { return instance; }</mark></code>
+	</div>
+	<code class="next">  instance = this;</code>
+	<code class="next">  this.asd = 'qwe';</code>
+	<code class="next"> }; }());</code>
+		</pre>
+</section>
+<section class="slide">
+	<h2>Singleton</h2>
+	<ol>
+		<li>Ссылка на экземпляр в cтатическом свойстве конструктора
+			<mark>Singleton.instance</mark>
+		</li>
+		<li class="next">Ссылка на экземпляр в замыкании
+			<mark>(function(){ var ... })()</mark>
+		</li>
+	</ol>
+	<h2 class="next">Singleton ES6</h2>
+	<ol>
+		<li class="next">Экспорт экземпляра объекта из модуля
+			<mark>export default instance</mark>
+		</li>
+		<li class="next">Хранение экземпляра в замыкании
+			<mark>{ let ... }</mark>
+		</li>
+	</ol>
+</section>
+<section class="slide">
+	<h2>Singleton ES6</h2>
+	<p>Экспорт экземпляра объекта из модуля</p>
+	<pre class="next">
+		<code>class <mark>Singleton</mark> {</code>
+		<code>	constructor(props) {}</code>
+		<code>	talk() {}</code>
+		<code>}</code>
+		<code class="next">export default <mark>new Singleton(props);</mark></code>
+	</pre>
+</section>
+<section class="slide"
+		 id="decoratorPic">
+	<h2>Decorator</h2>
+	<img src="img/Decorator.jpg"
+		 alt=""
+		 class="cover">
+	<style>
+		#decoratorPic h2 {
+			color: #f9ead3;
+		}
+	</style>
+</section>
+<section class="slide">
+	<h2>Decorator</h2>
+	<p>
+		<a href="https://learn.javascript.ru/decorators">Decorator</a>
+		позволяет взять существующую функцию и изменить/расширить ее поведение.
+	</p>
+	<pre>
+	<code class="next">function example( qwe, asd ){ ... };</code>
+	<div class="next">
+		<code>function <mark>decorator(func, props)</mark> {</code>
+		<code>	return function() { <span class="comment">// делаем дела</span></code>
+		<code class="next">		<mark>return func.apply(this, arguments);</mark></code>
+		<code>	}</code>
+	</div>
+	<code class="next">example = <mark>decorator(example)</mark>;</code>
+	</pre>
+</section>
+<section class="slide">
+	<h2>Decorator</h2>
+	<p>Декораторы способны упростить рутинные, повторяющиеся задачи, вынести их из кода функции:</p>
+	<ul>
+		<li class="next">
+			<a href="https://css-tricks.com/debouncing-throttling-explained-examples/">debouncing</a>
+			- позволяют "группировать" несколько последовательных вызовов в один
+		</li>
+		<li class="next">
+			<a href="https://css-tricks.com/debouncing-throttling-explained-examples/">throttling</a>
+			- позволяет вызывать функцию раз в X моментов времени
+		</li>
+		<li class="next">счетчик вызовов или времени выполнения функции</li>
+		<li class="next">проверки типов, прав доступа</li>
+		<li class="next">логирование и кэширование</li>
+	</ul>
+</section>
+<section class="slide">
+	<h2>Decorator + Memoization</h2>
+	<p>
+		<mark>Memoization</mark>
+		- техника программирования, позволяющая увеличить производительность функций,
+		<mark>кэшируя</mark>
+		предыдущие
+		вычесленные значения.
+	</p>
+	<a href="examples/Decorator.js"
+	   class="note">/examples/Decorator.js
+	</a>
+</section>
+<section class="slide"
+		 id="mixinPic">
+	<h2>Mixin</h2>
+	<img src="img/Mixin.jpg"
+		 alt=""
+		 class="cover">
+	<style>
+		#mixinPic h2 {
+			color: #2f1262;
+		}
+	</style>
+</section>
+<section class="slide">
+	<h2>Mixin</h2>
+	<p>
+		<mark>Mixin</mark>
+		– объект, содержащий методы и свойства для реализации конкретного функционала.
+	</p>
+	<p class="next">Для добавления примеси в класс – её просто «подмешивают» в прототип.</p>
+	<p class="next">«Подмешать» можно сколько угодно примесей, но если имена методов в разных примесях совпадают, то
+		возможны
+		конфликты.</p>
+	<p class="next">Конфликты при грамотно оформленных примесях возникают редко.</p>
+</section>
+<section class="slide">
+	<h2>Mixin</h2>
+	<pre>
+		<code>function Example(){ ... }; <span class="comment">// class Example { ... }</span></code>
+		<div class="next">
+			<code>var <mark>mixin</mark> = {</code>
+			<code>	qew: function(){</code>
+			<code>		console.log('qwe');</code>
+			<code>	}</code>
+			<code>};</code>
+		</div>
+		<code class="next"><mark>for(var key in mixin) Example.prototype[key] = mixin[key];</mark></code>
+		<code class="next"><span class="comment">//Object.assign(Example.prototype, mixin);</span></code>
+	</pre>
+</section>
+<section class="slide">
+	<h2>Mixin ES6</h2>
+	<pre>
+		<code class="next">let <mark>Mixin = (superclass) => class extends superclass {</mark></code>
+		<div class="next">
+			<code>	foo() {</code>
+    		<code>		console.log('foo from MyMixin');</code>
+    		<code>		<mark>if (super.foo) super.foo();</mark></code>
+  			<code>	};</code>
+			<code>};</code>
+		</div>
+		<code class="next">class Class extends <mark>Mixin(BaseClass)</mark> { ... };</code>
+	</pre>
+</section>
+<section class="slide"
+		 id="iteratorPic">
+	<h2>Iterator</h2>
+	<img src="img/Iterator.jpg"
+		 alt=""
+		 class="cover">
+	<style>
+		#iteratorPic h2 {
+			color: #0f1d49;
+		}
+	</style>
+</section>
+<section class="slide">
+	<h2>Iterator</h2>
+	<p>Когда уместно применить?</p>
+	<ol>
+		<li class="next">Объект имеет сложную структуру</li>
+		<li class="next">Объект имеет разнородную структуру</li>
+		<li class="next">Необходимо реализовать специфичный обход объекта</li>
+	</ol>
+</section>
+<section class="slide">
+	<h2>Iterator</h2>
+	<p>Из чего состоит?</p>
+	<ol>
+		<li class="next">Внутренний указатель</li>
+		<li class="next">Итерируемый объект</li>
+	</ol>
+	<ol>
+		<li class="next">reset, next, getCurrent, hasNext</li>
+		<li class="next">set, prev, last, first, ...</li>
+	</ol>
+</section>
+<section class="slide">
+	<h2>Iterator</h2>
+	<h3>Как мы перебираем наборы?</h3>
+	<ul>
+		<li class="next">
+			<mark>for</mark>
+			( var i = 0; i < myArray.length; i++ ){ ... };
+		</li>
+		<li class="next">myArray.
+			<mark>forEach</mark>
+			( function (value) { ... } );
+			<ul class="next">
+				<li>break; return;</li>
+			</ul>
+		</li>
+		<li class="next">
+			<mark>for</mark>
+			(var i
+			<mark>in</mark>
+			myArray) { ... }
+			<ul>
+				<li class="next">i - строка</li>
+				<li class="next">затронет expando-свойства ( myArray.prop = "qwe" )</li>
+				<li class="next">произвольный порядок обхождения</li>
+			</ul>
+		</li>
+	</ul>
+</section>
+<section class="slide">
+	<h2>Iterator ES6</h2>
+	<h3>Как мы перебираем массивы в ES6?</h3>
+	<p class="next">
+		<mark>for</mark>
+		( var value
+		<mark>of</mark>
+		myArray ) { ... };
+	</p>
+	<ul>
+		<li class="next">Лаконичный синтаксис</li>
+		<li class="next">У него нет недостатков
+			<mark>for-in</mark>
+		</li>
+		<li class="next">Работает с
+			<mark>break</mark>
+			,
+			<mark>continue</mark>
+			и
+			<mark>return</mark>
+		</li>
+		<li class="next">
+			<mark>.return()</mark>
+			и
+			<mark>.throw(exc)</mark>
+		</li>
+	</ul>
+</section>
+<section class="slide">
+	<h2>Iterator ES6</h2>
+	<p>А что если не массив?<span class="next"> - реализуем интерфейс итератора</span></p>
+	<pre>
+		<code class="next">var exampleIterator = {</code>
+		<div class="next">
+			<code>	<mark>[Symbol.iterator]</mark>: function () {</code>
+			<code>		<mark>return this</mark>; <span class="comment">//что перебираем</span></code>
+			<code>	},</code>
+		</div>
+		<div class="next"><code>	<mark>next</mark>: function () {  <span class="comment">//всё?, след.значение (<mark>for-of</mark>)</span></code>
+			<code>		<mark>return { done: false, value: 0 }</mark>;</code>
+			<code>	} };</code>
+		</div>
+	</pre>
+</section>
+<section class="slide">
+	<h2>Iterator ES6</h2>
+	<ol>
+		<li class="next">Реализовать интерфейс итератора</li>
+		<li class="next">Обернуть функцией-генератором</li>
+	</ol>
+</section>
+<section class="slide"
+		 id="sourcesPic">
+	<h2>Источники:</h2>
+	<img src="img/Sources.jpg"
+		 alt=""
+		 class="cover">
+	<style>
+		#sourcesPic h2 {
+			color: #fffce9;
+		}
+	</style>
+</section>
+<section class="slide">
+	<h2>Источники</h2>
+	<ol>
+		<li>
+			<a href="https://vk.com/doc10903696_195353516">
+				"JavaScript. Шаблоны" - Стоян Стефанов
+			</a>
+		</li>
+		<li>
+			<a href="http://dofactory.com/javascript/design-patterns">
+				dofactory.com/javascript/design-patterns
+			</a>
+		</li>
+		<li>
+			<a href="https://github.com/nnupoor/js_designpatterns">
+				github.com/nnupoor/js_designpatterns
+			</a>
+			и
+			<a href="https://github.com/shichuan/javascript-patterns">
+				github.com/shichuan/javascript-patterns
+			</a>
+		</li>
+		<li>
+			<a href="http://2ality.com/">
+				2ality.com
+			</a>
+		</li>
+		<li>
+			<a href="https://learn.javascript.ru/">learn.javascript.ru</a>
+			и
+			<a href="https://learn.javascript.ru/es-modern">learn.javascript.ru/es-modern</a>
+		</li>
+		<li>
+			<a href="https://www.google.ru/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#newwindow=1&q=site:frontender.info%2Fes6-in-depth">
+				frontender.info/es6-in-depth-*
+			</a>
+		</li>
+		<li>
+			<a href="https://hemantajax.gitbooks.io/es6-in-depth/content/">
+				Корманный справочник ES6
+			</a>
+		</li>
+	</ol>
+</section>
+<p class="badge">
+	<a href="https://github.com/shower/shower">Fork me on GitHub</a>
+</p>
+<!--
+	To hide progress bar from entire presentation
+	just remove “progress” element.
+	-->
+<div class="progress"></div>
+<script src="node_modules/shower-core/shower.min.js"></script>
+<!-- Copyright © 2015 Yours Truly, Famous Inc. -->
+<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>
